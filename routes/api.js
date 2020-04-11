@@ -37,7 +37,6 @@ module.exports = function (app) {
       if (!data){res.send( 'no book exists')}
       if(err) res.send("no data found that matches params");
       else  {
-        console.log(data.comments)
         res.send(data);
       }
      })
@@ -50,7 +49,8 @@ module.exports = function (app) {
     if(!req.body.title){res.send("Please include a title")}
     else{
       var newBook=new Book({
-        title: req.body.title
+        title: req.body.title,
+        commentCount: 0
       })
     newBook.save();
     res.send(newBook);
@@ -65,16 +65,17 @@ module.exports = function (app) {
 
   app.route('/api/books/:id')
     .get(function (req, res){
-      var bookid = req.query.id;
-    console.log(req.params)
-     var collection = Book.findById(bookid, function(err, data){ 
+     var collection = Book.findById(req.params.id, function(err, data){ 
       if (!data){
-        res.send( 'no book exists')}
-      if(err) res.send("no data found that matches params");
-      else  res.send(data);
+        res.send( 'no book exists')
+      return;}
+      if(err) {res.send("no data found that matches params")
+       return;}
+      else  
+        res.send(data);
      })
     })
-  //
+  
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
     
     .post(function(req, res){
@@ -85,6 +86,7 @@ module.exports = function (app) {
         if(!comment){res.send("Please enter a comment")}
       else{
         data.comment.push(comment);
+        data.commentCount++
       data.save();
       res.send(data)
       }
