@@ -115,13 +115,13 @@ suite('Functional Tests', function() {
       
       test('Test POST /api/books/[id] with comment', function(done){
       chai.request(server)
-      .post('/api/books/5e91ffabee8bfb1208c5876a')
+      .post('/api/books/5e920c9ad6b4bf2c175ff7ab')
       .query({
         comment: "Hello World!"
       })
       .end(function(err, res){
         assert.equal(res.status, 200);
-    //    assert.property(res.body[0], 'commentcount', 'Books in array should contain commentcount');
+        assert.property(res.body, 'commentCount', 'Books in array should contain commentCount');
         assert.property(res.body, 'title');
         assert.property(res.body, '_id');
         done();

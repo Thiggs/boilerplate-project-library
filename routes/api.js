@@ -80,12 +80,12 @@ module.exports = function (app) {
     
     .post(function(req, res){
       var bookid = req.params.id;
-      var comment = req.body.comment;
+      var comment = req.query.comment;
       Book.findByIdAndUpdate(bookid, {new: true}, function(err, data){
       if(err){res.send('could not update '+bookid)}
-        if(!comment){res.send("Please enter a comment")}
+        if(!data){res.send("Please enter a comment")}
       else{
-        data.comment.push(comment);
+        data.comments.push(comment);
         data.commentCount++
       data.save();
       res.send(data)
