@@ -57,9 +57,12 @@ module.exports = function (app) {
     }
     })
     
- //   .delete(function(req, res){
-      //if successful response will be 'complete delete successful'
- //   });
+    .delete(function(req, res){
+      Book.deleteMany({}, function(err, data){ 
+      if(err) res.send("could not delete");
+       else res.send('complete delete successful');
+    });
+        });
 
 
 
@@ -96,7 +99,13 @@ module.exports = function (app) {
     
     .delete(function(req, res){
       var bookid = req.params.id;
+      if (!bookid){res.send('_id error')}
+    else{Book.findByIdAndRemove(bookid, function(err, data){ 
+      if(err) res.send("no book exists");
+       else res.send('delete successful');
       //if successful response will be 'delete successful'
     });
+        }
+  });
   
 };
